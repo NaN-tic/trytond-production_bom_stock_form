@@ -1,0 +1,23 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:production.bom.tree,current_stock:"
+msgid "Current Stock"
+msgstr "Estoc actual"
+
+msgctxt "field:production.bom.tree,input_stock:"
+msgid "Inputs"
+msgstr "Entrades"
+
+msgctxt "field:production.bom.tree,output_stock:"
+msgid "Outputs"
+msgstr "Sortides"
+
+msgctxt "field:production.bom.tree.open.start,date:"
+msgid "Date"
+msgstr "Data"
+
+msgctxt "field:production.bom.tree.open.start,warehouse:"
+msgid "Warehouse"
+msgstr "Magatzem"
