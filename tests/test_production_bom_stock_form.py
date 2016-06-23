@@ -11,8 +11,8 @@ from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT
 from trytond.transaction import Transaction
 
 
-class TestCase(unittest.TestCase):
-    'Test module'
+class ProductionBomStockFormTestCase(unittest.TestCase):
+    'Test Production Bom Stock Form module'
 
     def setUp(self):
         trytond.tests.test_tryton.install_module('production_bom_stock_form')
@@ -315,5 +315,6 @@ def suite():
     for test in test_company.suite():
         if test not in suite and not isinstance(test, doctest.DocTestCase):
             suite.addTest(test)
-    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestCase))
+    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
+        ProductionBomStockFormTestCase))
     return suite
