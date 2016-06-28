@@ -20,9 +20,9 @@ class BOMTree(StockMixin):
     def set_stock_recursively(cls, bom_tree):
         Product = Pool().get('product.product')
         product = Product(bom_tree['product'])
-        bom_tree['input_stock'] = cls.get_input_output_stock([product],
+        bom_tree['input_stock'] = cls.get_input_output_product([product],
             'input_stock')[product.id]
-        bom_tree['output_stock'] = cls.get_input_output_stock([product],
+        bom_tree['output_stock'] = cls.get_input_output_product([product],
             'output_stock')[product.id]
         bom_tree['current_stock'] = product.quantity
         if bom_tree['childs']:
@@ -59,9 +59,9 @@ class OpenBOMTreeTree(StockMixin):
             uom)
 
         product = Product(bom_tree['bom_tree'][0]['product'])
-        bom_tree['bom_tree'][0]['input_stock'] = cls.get_input_output_stock(
+        bom_tree['bom_tree'][0]['input_stock'] = cls.get_input_output_product(
             [product], 'input_stock')[product.id]
-        bom_tree['bom_tree'][0]['output_stock'] = cls.get_input_output_stock(
+        bom_tree['bom_tree'][0]['output_stock'] = cls.get_input_output_product(
             [product], 'output_stock')[product.id]
         bom_tree['bom_tree'][0]['current_stock'] = product.quantity
         return bom_tree
