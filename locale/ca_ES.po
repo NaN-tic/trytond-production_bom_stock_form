@@ -18,6 +18,22 @@ msgctxt "field:production.bom.tree.open.start,date:"
 msgid "Date"
 msgstr "Data"
 
+msgctxt "field:production.bom.tree.open.start,show_stock:"
+msgid "Show stock"
+msgstr "Mostrar stock"
+
 msgctxt "field:production.bom.tree.open.start,warehouse:"
 msgid "Warehouse"
 msgstr "Magatzem"
+
+msgctxt "help:production.bom.tree.open.start,date:"
+msgid "The date that calculate stock quantity"
+msgstr "La data que es calcularà les quantitats d'estoc"
+
+msgctxt "help:production.bom.tree.open.start,show_stock:"
+msgid "Show stock quantity"
+msgstr "Mostra les quantitats d'estoc"
+
+msgctxt "help:production.bom.tree.open.start,warehouse:"
+msgid "The warehouse that calculate stock quantity"
+msgstr "El magatzem que es calcularà les quantitats d'estoc"
