@@ -17,23 +17,41 @@ class BOMTree(StockMixin):
     current_stock = fields.Float('Current Stock')
 
     @classmethod
-    def set_stock_recursively(cls, bom_tree):
+    def set_stock_recursively(cls, bom_tree, inputs, outputs):
         Product = Pool().get('product.product')
+
         product = Product(bom_tree['product'])
-        bom_tree['input_stock'] = cls.get_input_output_product([product],
-            'input_stock')[product.id]
-        bom_tree['output_stock'] = cls.get_input_output_product([product],
-            'output_stock')[product.id]
+        bom_tree['input_stock'] = inputs[bom_tree['product']]
+        bom_tree['output_stock'] = outputs[bom_tree['product']]
         bom_tree['current_stock'] = product.quantity
         if bom_tree['childs']:
             for child in bom_tree['childs']:
-                cls.set_stock_recursively(child)
+                cls.set_stock_recursively(child, inputs, outputs)
+
+    @classmethod
+    def get_tree_products(cls, bom_trees):
+        products = set()
+        for bom_tree in bom_trees:
+            products.add(bom_tree['product'])
+            if bom_tree['childs']:
+                products |= cls.get_tree_products(bom_tree['childs'])
+        return products
 
     @classmethod
     def tree(cls, product, quantity, uom, bom=None):
+        Product = Pool().get('product.product')
+
         bom_trees = super(BOMTree, cls).tree(product, quantity, uom, bom)
+        if not bom_trees:
+            return
+
+        product_ids = list(cls.get_tree_products(bom_trees))
+        products = Product.browse(product_ids)
+        inputs = cls.get_input_output_product(products, 'input_stock')
+        outputs = cls.get_input_output_product(products, 'output_stock')
+
         for bom_tree in bom_trees:
-            cls.set_stock_recursively(bom_tree)
+            cls.set_stock_recursively(bom_tree, inputs, outputs)
         return bom_trees
 
 
