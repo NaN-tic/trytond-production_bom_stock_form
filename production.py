@@ -3,7 +3,7 @@
 from trytond.model import fields
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
-from trytond.modules.stock_calculation import StockMixin
+from trytond.modules.stock_calculation.stock import StockMixin
 
 
 __all__ = ['BOMTree', 'OpenBOMTreeStart', 'OpenBOMTreeTree', 'OpenBOMTree']
