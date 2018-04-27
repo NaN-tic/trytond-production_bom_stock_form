@@ -2,111 +2,107 @@
 # copyright notices and license terms.
 import datetime
 import doctest
-import trytond.tests.test_tryton
 import unittest
+
+import trytond.tests.test_tryton
+from trytond.tests.test_tryton import ModuleTestCase, with_transaction
 from decimal import Decimal
 from functools import partial
-from trytond.tests.test_tryton import test_view, test_depends
-from trytond.tests.test_tryton import POOL, DB_NAME, USER, CONTEXT
 from trytond.transaction import Transaction
+from trytond.pool import Pool
+from trytond.modules.company.tests import create_company, set_company
 
 
-class ProductionBomStockFormTestCase(unittest.TestCase):
+class ProductionBomStockFormTestCase(ModuleTestCase):
     'Test Production Bom Stock Form module'
+    module = 'production_bom_stock_form'
 
+    @with_transaction()
     def setUp(self):
-        trytond.tests.test_tryton.install_module('production_bom_stock_form')
-        self.template = POOL.get('product.template')
-        self.product = POOL.get('product.product')
-        self.category = POOL.get('product.category')
-        self.uom = POOL.get('product.uom')
-        self.location = POOL.get('stock.location')
-        self.bom = POOL.get('production.bom')
-        self.bom_imput = POOL.get('production.bom.input')
-        self.bom_output = POOL.get('production.bom.output')
-        self.bom_tree = POOL.get('production.bom.tree.open.tree')
-        self.product_bom = POOL.get('product.product-production.bom')
-        self.inventory = POOL.get('stock.inventory')
-        self.inventory_line = POOL.get('stock.inventory.line')
-        self.move = POOL.get('stock.move')
-        self.company = POOL.get('company.company')
-        self.user = POOL.get('res.user')
-        self.production = POOL.get('production')
+        pool = Pool()
+        self.template = pool.get('product.template')
+        self.product = pool.get('product.product')
+        self.category = pool.get('product.category')
+        self.uom = pool.get('product.uom')
+        self.location = pool.get('stock.location')
+        self.bom = pool.get('production.bom')
+        self.bom_imput = pool.get('production.bom.input')
+        self.bom_output = pool.get('production.bom.output')
+        self.bom_tree = pool.get('production.bom.tree.open.tree')
+        self.product_bom = pool.get('product.product-production.bom')
+        self.inventory = pool.get('stock.inventory')
+        self.inventory_line = pool.get('stock.inventory.line')
+        self.move = pool.get('stock.move')
+        self.company = pool.get('company.company')
+        self.user = pool.get('res.user')
+        self.production = pool.get('production')
 
-    def test0005views(self):
-        'Test views'
-        test_view('production_bom_stock_form')
 
-    def test0006depends(self):
-        'Test depends'
-        test_depends()
-
+    @with_transaction()
     def test0010production_bom_tree(self):
         'Test production BOM tree'
-        with Transaction().start(DB_NAME, USER,
-                context=CONTEXT) as transaction:
-            category, = self.category.create([{
-                        'name': 'Test Production BOM Tree',
-                        }])
-            uom, = self.uom.search([('name', '=', 'Unit')])
+        category, = self.category.create([{
+                    'name': 'Test Production BOM Tree',
+                    }])
+        uom, = self.uom.search([('name', '=', 'Unit')])
 
-            template, = self.template.create([{
-                        'name': 'Product',
-                        'type': 'goods',
-                        'list_price': Decimal(0),
-                        'cost_price': Decimal(0),
-                        'category': category.id,
-                        'cost_price_method': 'fixed',
-                        'default_uom': uom.id,
-                        }])
-            product, = self.product.create([{
-                        'template': template.id,
-                        }])
+        company = create_company()
+        template, = self.template.create([{
+                    'name': 'Product',
+                    'type': 'goods',
+                    'list_price': Decimal(0),
+                    'cost_price': Decimal(0),
+                    'producible': True,
+                    # 'category': category.id,
+                    'cost_price_method': 'fixed',
+                    'default_uom': uom.id,
+                    }])
+        product, = self.product.create([{
+                    'template': template.id,
+                    }])
 
-            template1, = self.template.create([{
-                        'name': 'Component 1',
-                        'type': 'goods',
-                        'list_price': Decimal(0),
-                        'cost_price': Decimal(0),
-                        'category': category.id,
-                        'cost_price_method': 'fixed',
-                        'default_uom': uom.id,
-                        }])
-            component1, = self.product.create([{
-                        'template': template.id,
-                        }])
+        template1, = self.template.create([{
+                    'name': 'Component 1',
+                    'type': 'goods',
+                    'list_price': Decimal(0),
+                    'cost_price': Decimal(0),
+                    # 'category': category.id,
+                    'cost_price_method': 'fixed',
+                    'default_uom': uom.id,
+                    }])
+        component1, = self.product.create([{
+                    'template': template.id,
+                    }])
 
-            template2, = self.template.create([{
-                        'name': 'Component 2',
-                        'type': 'goods',
-                        'list_price': Decimal(0),
-                        'cost_price': Decimal(0),
-                        'category': category.id,
-                        'cost_price_method': 'fixed',
-                        'default_uom': uom.id,
-                        }])
-            component2, = self.product.create([{
-                        'template': template.id,
-                        }])
+        template2, = self.template.create([{
+                    'name': 'Component 2',
+                    'type': 'goods',
+                    'list_price': Decimal(0),
+                    'cost_price': Decimal(0),
+                    # 'category': category.id,
+                    'cost_price_method': 'fixed',
+                    'default_uom': uom.id,
+                    }])
+        component2, = self.product.create([{
+                    'template': template.id,
+                    }])
 
-            warehouse_loc, = self.location.search([('code', '=', 'WH')])
-            supplier_loc, = self.location.search([('code', '=', 'SUP')])
-            input_loc, = self.location.search([('code', '=', 'IN')])
-            customer_loc, = self.location.search([('code', '=', 'CUS')])
-            storage_loc, = self.location.search([('code', '=', 'STO')])
-            output_loc, = self.location.search([('code', '=', 'OUT')])
-            production_loc, = self.location.search([('code', '=', 'PROD')])
+        warehouse_loc, = self.location.search([('code', '=', 'WH')])
+        supplier_loc, = self.location.search([('code', '=', 'SUP')])
+        input_loc, = self.location.search([('code', '=', 'IN')])
+        customer_loc, = self.location.search([('code', '=', 'CUS')])
+        storage_loc, = self.location.search([('code', '=', 'STO')])
+        output_loc, = self.location.search([('code', '=', 'OUT')])
+        production_loc, = self.location.search([('code', '=', 'PROD')])
 
-            company, = self.company.search([
-                    ('rec_name', '=', 'Dunder Mifflin'),
-                    ])
-            currency = company.currency
-            self.user.write([self.user(USER)], {
-                'main_company': company.id,
-                'company': company.id,
-                })
+        # currency = company.currency
+        # self.user.write([self.user(USER)], {
+        #     'main_company': company.id,
+        #     'company': company.id,
+        #     })
 
-            today = datetime.date.today()
+        today = datetime.date.today()
+        with set_company(company):
 
             bom, = self.bom.create([{
                         'name': 'Product',
@@ -180,19 +176,25 @@ class ProductionBomStockFormTestCase(unittest.TestCase):
                 'current_stock': 20.0,
                 'childs': [],
                 }
-            with transaction.set_context(locations=[warehouse_loc.id],
+            with Transaction().set_context(locations=[warehouse_loc.id],
                     stock_date_end=today):
                 bom_trees = tree()
                 for bom_tree in bom_trees:
                     results = bom_trees[bom_tree]
                     for result in results:
                         for key in result:
+                            if 'rec_name' in key:
+                                continue
                             if key != 'childs':
                                 self.assertEqual(result[key],
                                     test_product[key])
                             else:
                                 for child in result[key]:
                                     for child_key in child:
+                                        if 'rec_name' in child_key:
+                                            continue
+                                        if 'childs' == child_key:
+                                            continue
                                         if child['product'] == component1.id:
                                             self.assertEqual(child[child_key],
                                                 test_component1[child_key])
@@ -209,7 +211,7 @@ class ProductionBomStockFormTestCase(unittest.TestCase):
                         'effective_date': today,
                         'company': company.id,
                         'unit_price': Decimal('1'),
-                        'currency': currency.id,
+                        # 'currency': currency.id,
                         }])
 
             production, = self.production.create([{
@@ -230,7 +232,7 @@ class ProductionBomStockFormTestCase(unittest.TestCase):
                         'effective_date': today,
                         'company': company,
                         'unit_price': Decimal('1'),
-                        'currency': currency,
+                        # 'currency': currency,
                         'production_output': production,
                         }])
             self.move.create([{
@@ -242,7 +244,7 @@ class ProductionBomStockFormTestCase(unittest.TestCase):
                         'effective_date': today,
                         'company': company,
                         'unit_price': Decimal('1'),
-                        'currency': currency,
+                        # 'currency': currency,
                         'production_input': production,
                         }])
             self.move.create([{
@@ -254,7 +256,7 @@ class ProductionBomStockFormTestCase(unittest.TestCase):
                         'effective_date': today,
                         'company': company,
                         'unit_price': Decimal('1'),
-                        'currency': currency,
+                        # 'currency': currency,
                         'production_input': production,
                         }])
             self.production.wait([production])
@@ -288,19 +290,25 @@ class ProductionBomStockFormTestCase(unittest.TestCase):
                 'current_stock': 20.0,
                 'childs': [],
                 }
-            with transaction.set_context(locations=[warehouse_loc.id],
+            with Transaction().set_context(locations=[warehouse_loc.id],
                     stock_date_end=today):
                 bom_trees = tree()
                 for bom_tree in bom_trees:
                     results = bom_trees[bom_tree]
                     for result in results:
                         for key in result:
+                            if 'rec_name' in key:
+                                continue
                             if key != 'childs':
                                 self.assertEqual(result[key],
                                     test_product[key])
                             else:
                                 for child in result[key]:
                                     for child_key in child:
+                                        if 'rec_name' in child_key:
+                                            continue
+                                        if 'childs' == child_key:
+                                            continue
                                         if child['product'] == component1.id:
                                             self.assertEqual(child[child_key],
                                                 test_component1[child_key])
