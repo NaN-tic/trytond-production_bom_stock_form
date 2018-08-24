@@ -9,8 +9,7 @@ from trytond.modules.stock_calculation.stock import StockMixin
 __all__ = ['BOMTree', 'OpenBOMTreeStart', 'OpenBOMTreeTree', 'OpenBOMTree']
 
 
-class BOMTree(StockMixin):
-    __metaclass__ = PoolMeta
+class BOMTree(StockMixin, metaclass=PoolMeta):
     __name__ = 'production.bom.tree'
     input_stock = fields.Float('Inputs')
     output_stock = fields.Float('Outputs')
@@ -55,8 +54,7 @@ class BOMTree(StockMixin):
         return bom_trees
 
 
-class OpenBOMTreeStart:
-    __metaclass__ = PoolMeta
+class OpenBOMTreeStart(metaclass=PoolMeta):
     __name__ = 'production.bom.tree.open.start'
     date = fields.Date('Date', required=True)
     warehouse = fields.Many2One('stock.location', 'Warehouse', required=True,
@@ -65,8 +63,7 @@ class OpenBOMTreeStart:
             ])
 
 
-class OpenBOMTreeTree(StockMixin):
-    __metaclass__ = PoolMeta
+class OpenBOMTreeTree(StockMixin, metaclass=PoolMeta):
     __name__ = 'production.bom.tree.open.tree'
 
     @classmethod
@@ -85,8 +82,7 @@ class OpenBOMTreeTree(StockMixin):
         return bom_tree
 
 
-class OpenBOMTree:
-    __metaclass__ = PoolMeta
+class OpenBOMTree(metaclass=PoolMeta):
     __name__ = 'production.bom.tree.open'
 
     def default_start(self, fields):
