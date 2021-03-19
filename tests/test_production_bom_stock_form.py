@@ -92,12 +92,6 @@ class ProductionBomStockFormTestCase(ModuleTestCase):
         output_loc, = self.location.search([('code', '=', 'OUT')])
         production_loc, = self.location.search([('code', '=', 'PROD')])
 
-        # currency = company.currency
-        # self.user.write([self.user(USER)], {
-        #     'main_company': company.id,
-        #     'company': company.id,
-        #     })
-
         today = datetime.date.today()
         with set_company(company):
 
