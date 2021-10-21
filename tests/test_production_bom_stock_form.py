@@ -50,7 +50,6 @@ class ProductionBomStockFormTestCase(ModuleTestCase):
         template, = self.template.create([{
                     'name': 'Product',
                     'type': 'goods',
-                    'list_price': Decimal(0),
                     'producible': True,
                     # 'category': category.id,
                     'cost_price_method': 'fixed',
@@ -63,7 +62,6 @@ class ProductionBomStockFormTestCase(ModuleTestCase):
         template1, = self.template.create([{
                     'name': 'Component 1',
                     'type': 'goods',
-                    'list_price': Decimal(0),
                     # 'category': category.id,
                     'cost_price_method': 'fixed',
                     'default_uom': uom.id,
@@ -75,7 +73,6 @@ class ProductionBomStockFormTestCase(ModuleTestCase):
         template2, = self.template.create([{
                     'name': 'Component 2',
                     'type': 'goods',
-                    'list_price': Decimal(0),
                     # 'category': category.id,
                     'cost_price_method': 'fixed',
                     'default_uom': uom.id,
