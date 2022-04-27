@@ -1,5 +1,7 @@
-# The COPYRIGHT file at the top level of this repository contains the full
-# copyright notices and license terms.
+
+# This file is part of Tryton.  The COPYRIGHT file at the top level of
+# this repository contains the full copyright notices and license terms.
+
 import datetime
 import doctest
 import unittest
@@ -10,11 +12,12 @@ from decimal import Decimal
 from functools import partial
 from trytond.transaction import Transaction
 from trytond.pool import Pool
-from trytond.modules.company.tests import create_company, set_company
+from trytond.modules.company.tests import (create_company, set_company,
+    CompanyTestMixin)
 
 
-class ProductionBomStockFormTestCase(ModuleTestCase):
-    'Test Production Bom Stock Form module'
+class ProductionBomStockFormTestCase(CompanyTestMixin, ModuleTestCase):
+    'Test ProductionBomStockForm module'
     module = 'production_bom_stock_form'
 
     @with_transaction()
@@ -305,12 +308,4 @@ class ProductionBomStockFormTestCase(ModuleTestCase):
                                                 test_component2[child_key])
 
 
-def suite():
-    suite = trytond.tests.test_tryton.suite()
-    from trytond.modules.company.tests import test_company
-    for test in test_company.suite():
-        if test not in suite and not isinstance(test, doctest.DocTestCase):
-            suite.addTest(test)
-    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(
-        ProductionBomStockFormTestCase))
-    return suite
+del ModuleTestCase
