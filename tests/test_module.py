@@ -174,7 +174,7 @@ class ProductionBomStockFormTestCase(CompanyTestMixin, ModuleTestCase):
                     results = bom_trees[bom_tree]
                     for result in results:
                         for key in result:
-                            if 'rec_name' in key:
+                            if 'rec_name' in key or key.endswith('.'):
                                 continue
                             if key != 'childs':
                                 self.assertEqual(result[key],
@@ -182,7 +182,8 @@ class ProductionBomStockFormTestCase(CompanyTestMixin, ModuleTestCase):
                             else:
                                 for child in result[key]:
                                     for child_key in child:
-                                        if 'rec_name' in child_key:
+                                        if ('rec_name' in child_key
+                                                or child_key.endswith('.')):
                                             continue
                                         if 'childs' == child_key:
                                             continue
@@ -288,7 +289,7 @@ class ProductionBomStockFormTestCase(CompanyTestMixin, ModuleTestCase):
                     results = bom_trees[bom_tree]
                     for result in results:
                         for key in result:
-                            if 'rec_name' in key:
+                            if 'rec_name' in key or key.endswith('.'):
                                 continue
                             if key != 'childs':
                                 self.assertEqual(result[key],
@@ -296,7 +297,8 @@ class ProductionBomStockFormTestCase(CompanyTestMixin, ModuleTestCase):
                             else:
                                 for child in result[key]:
                                     for child_key in child:
-                                        if 'rec_name' in child_key:
+                                        if ('rec_name' in child_key
+                                                or child_key.endswith('.')):
                                             continue
                                         if 'childs' == child_key:
                                             continue
