@@ -50,6 +50,7 @@ class ProductionBomStockFormTestCase(CompanyTestMixin, ModuleTestCase):
         uom, = self.uom.search([('name', '=', 'Unit')])
 
         company = create_company()
+        currency = company.currency
         template, = self.template.create([{
                     'name': 'Product',
                     'type': 'goods',
@@ -203,7 +204,7 @@ class ProductionBomStockFormTestCase(CompanyTestMixin, ModuleTestCase):
                         'effective_date': today,
                         'company': company.id,
                         'unit_price': Decimal('1'),
-                        # 'currency': currency.id,
+                        'currency': currency.id,
                         }])
 
             production, = self.production.create([{
@@ -224,7 +225,7 @@ class ProductionBomStockFormTestCase(CompanyTestMixin, ModuleTestCase):
                         'effective_date': today,
                         'company': company,
                         'unit_price': Decimal('1'),
-                        # 'currency': currency,
+                        'currency': currency,
                         'production_output': production,
                         }])
             self.move.create([{
@@ -236,7 +237,7 @@ class ProductionBomStockFormTestCase(CompanyTestMixin, ModuleTestCase):
                         'effective_date': today,
                         'company': company,
                         'unit_price': Decimal('1'),
-                        # 'currency': currency,
+                        'currency': currency,
                         'production_input': production,
                         }])
             self.move.create([{
@@ -248,7 +249,7 @@ class ProductionBomStockFormTestCase(CompanyTestMixin, ModuleTestCase):
                         'effective_date': today,
                         'company': company,
                         'unit_price': Decimal('1'),
-                        # 'currency': currency,
+                        'currency': currency,
                         'production_input': production,
                         }])
             self.production.wait([production])
