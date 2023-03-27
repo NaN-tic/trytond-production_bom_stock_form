@@ -11,6 +11,7 @@ __all__ = ['BOMTree', 'OpenBOMTreeStart', 'OpenBOMTreeTree', 'OpenBOMTree']
 
 class BOMTree(StockMixin, metaclass=PoolMeta):
     __name__ = 'production.bom.tree'
+    warehouses = fields.Char('Warehouses')
     input_stock = fields.Float('Inputs')
     output_stock = fields.Float('Outputs')
     current_stock = fields.Float('Current Stock')
@@ -57,7 +58,8 @@ class BOMTree(StockMixin, metaclass=PoolMeta):
 class OpenBOMTreeStart(metaclass=PoolMeta):
     __name__ = 'production.bom.tree.open.start'
     date = fields.Date('Date', required=True)
-    warehouse = fields.Many2One('stock.location', 'Warehouse', required=True,
+    warehouses = fields.Many2Many('stock.location', None, None, 'Warehouse',
+        required=True,
         domain=[
             ('type', '=', 'warehouse'),
             ])
@@ -69,6 +71,10 @@ class OpenBOMTreeTree(StockMixin, metaclass=PoolMeta):
     @classmethod
     def tree(cls, bom, product, quantity, uom):
         Product = Pool().get('product.product')
+        Location = Pool().get('stock.location')
+
+        locations = ",".join([x.name for x in
+            Location.browse(Transaction().context.get('locations', []))])
 
         bom_tree = super(OpenBOMTreeTree, cls).tree(bom, product, quantity,
             uom)
@@ -79,6 +85,7 @@ class OpenBOMTreeTree(StockMixin, metaclass=PoolMeta):
         bom_tree['bom_tree'][0]['output_stock'] = cls.get_input_output_product(
             [product], 'output_stock')[product.id]
         bom_tree['bom_tree'][0]['current_stock'] = product.quantity
+        bom_tree['bom_tree'][0]['warehouses'] = locations
         return bom_tree
 
 
@@ -92,6 +99,16 @@ class OpenBOMTree(metaclass=PoolMeta):
         return defaults
 
     def default_tree(self, fields):
+        res = {}
         with Transaction().set_context(stock_date_end=self.start.date,
-                locations=[self.start.warehouse.id]):
-            return super(OpenBOMTree, self).default_tree(fields)
+                locations=[w.id for w in self.start.warehouses]):
+            res = super(OpenBOMTree, self).default_tree(fields)
+
+        if len(self.start.warehouses) > 1:
+            for location in self.start.warehouses:
+                with Transaction().set_context(stock_date_end=self.start.date,
+                        locations=[location.id]):
+                    r = super(OpenBOMTree, self).default_tree(fields)
+                    res['bom_tree'] += r['bom_tree']
+
+        return res
