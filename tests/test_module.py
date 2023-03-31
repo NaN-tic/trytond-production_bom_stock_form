@@ -147,6 +147,7 @@ class ProductionBomStockFormTestCase(CompanyTestMixin, ModuleTestCase):
                 'input_stock': 0,
                 'output_stock': 0,
                 'current_stock': 0.0,
+                'warehouses': warehouse_loc.name,
                 }
             test_component1 = {
                 'product': component1.id,
@@ -262,6 +263,7 @@ class ProductionBomStockFormTestCase(CompanyTestMixin, ModuleTestCase):
                 'input_stock': 0,
                 'output_stock': 0,
                 'current_stock': 0.0,
+                'warehouses': warehouse_loc.name,
                 }
             test_component1 = {
                 'product': component1.id,
