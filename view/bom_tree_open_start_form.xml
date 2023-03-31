@@ -3,8 +3,7 @@
 this repository contains the full copyright notices and license terms. -->
 <data>
     <xpath expr="/form/field[@name='uom']" position="after">
-        <label name="warehouse"/>
-        <field name="warehouse"/>
+        <field name="warehouses" colspan="2"/>
         <label name="date"/>
         <field name="date"/>
     </xpath>
