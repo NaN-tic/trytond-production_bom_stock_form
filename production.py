@@ -79,12 +79,18 @@ class OpenBOMTreeTree(StockMixin, metaclass=PoolMeta):
         bom_tree = super(OpenBOMTreeTree, cls).tree(bom, product, quantity,
             uom)
 
-        product = Product(bom_tree['bom_tree'][0]['product'])
-        bom_tree['bom_tree'][0]['input_stock'] = cls.get_input_output_product(
-            [product], 'input_stock')[product.id]
-        bom_tree['bom_tree'][0]['output_stock'] = cls.get_input_output_product(
-            [product], 'output_stock')[product.id]
-        bom_tree['bom_tree'][0]['current_stock'] = product.quantity
+        input_stock, output_stock, current_stock = 0, 0, 0
+        for location in Transaction().context.get('locations', []):
+            with Transaction().set_context(locations=[location]):
+                product = Product(bom_tree['bom_tree'][0]['product'])
+                input_stock += cls.get_input_output_product(
+                    [product], 'input_stock')[product.id]
+                output_stock += cls.get_input_output_product(
+                    [product], 'output_stock')[product.id]
+                current_stock += product.quantity
+        bom_tree['bom_tree'][0]['input_stock'] = input_stock
+        bom_tree['bom_tree'][0]['output_stock'] = output_stock
+        bom_tree['bom_tree'][0]['current_stock'] = current_stock
         bom_tree['bom_tree'][0]['warehouses'] = locations
         return bom_tree
 
