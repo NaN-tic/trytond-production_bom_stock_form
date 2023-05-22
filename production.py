@@ -20,10 +20,16 @@ class BOMTree(StockMixin, metaclass=PoolMeta):
     def set_stock_recursively(cls, bom_tree, inputs, outputs):
         Product = Pool().get('product.product')
 
-        product = Product(bom_tree['product'])
         bom_tree['input_stock'] = inputs[bom_tree['product']]
         bom_tree['output_stock'] = outputs[bom_tree['product']]
-        bom_tree['current_stock'] = product.quantity
+
+        current_stock = 0
+        for location in Transaction().context.get('locations', []):
+            with Transaction().set_context(locations=[location]):
+                product = Product(bom_tree['product'])
+                current_stock += product.quantity
+        bom_tree['current_stock'] = current_stock
+
         if bom_tree['childs']:
             for child in bom_tree['childs']:
                 cls.set_stock_recursively(child, inputs, outputs)
@@ -40,7 +46,6 @@ class BOMTree(StockMixin, metaclass=PoolMeta):
     @classmethod
     def tree(cls, product, quantity, uom, bom=None):
         Product = Pool().get('product.product')
-
         bom_trees = super(BOMTree, cls).tree(product, quantity, uom, bom)
         if not bom_trees:
             return
