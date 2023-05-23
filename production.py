@@ -20,10 +20,13 @@ class BOMTree(StockMixin, metaclass=PoolMeta):
     def set_stock_recursively(cls, bom_tree, inputs, outputs):
         Product = Pool().get('product.product')
 
-        product = Product(bom_tree['product'])
         bom_tree['input_stock'] = inputs[bom_tree['product']]
         bom_tree['output_stock'] = outputs[bom_tree['product']]
-        bom_tree['current_stock'] = product.quantity
+
+        with Transaction().set_context(with_childs=True):
+            product = Product(bom_tree['product'])
+            bom_tree['current_stock'] = product.quantity
+
         if bom_tree['childs']:
             for child in bom_tree['childs']:
                 cls.set_stock_recursively(child, inputs, outputs)
@@ -40,7 +43,6 @@ class BOMTree(StockMixin, metaclass=PoolMeta):
     @classmethod
     def tree(cls, product, quantity, uom, bom=None):
         Product = Pool().get('product.product')
-
         bom_trees = super(BOMTree, cls).tree(product, quantity, uom, bom)
         if not bom_trees:
             return
@@ -71,27 +73,17 @@ class OpenBOMTreeTree(StockMixin, metaclass=PoolMeta):
     @classmethod
     def tree(cls, bom, product, quantity, uom):
         Product = Pool().get('product.product')
-        Location = Pool().get('stock.location')
-
-        locations = ",".join([x.name for x in
-            Location.browse(Transaction().context.get('locations', []))])
 
         bom_tree = super(OpenBOMTreeTree, cls).tree(bom, product, quantity,
             uom)
 
-        input_stock, output_stock, current_stock = 0, 0, 0
-        for location in Transaction().context.get('locations', []):
-            with Transaction().set_context(locations=[location]):
-                product = Product(bom_tree['bom_tree'][0]['product'])
-                input_stock += cls.get_input_output_product(
-                    [product], 'input_stock')[product.id]
-                output_stock += cls.get_input_output_product(
-                    [product], 'output_stock')[product.id]
-                current_stock += product.quantity
-        bom_tree['bom_tree'][0]['input_stock'] = input_stock
-        bom_tree['bom_tree'][0]['output_stock'] = output_stock
-        bom_tree['bom_tree'][0]['current_stock'] = current_stock
-        bom_tree['bom_tree'][0]['warehouses'] = locations
+        with Transaction().set_context(with_childs=True):
+            product = Product(bom_tree['bom_tree'][0]['product'])
+            bom_tree['bom_tree'][0]['input_stock'] = cls.get_input_output_product(
+                [product], 'input_stock')[product.id]
+            bom_tree['bom_tree'][0]['output_stock'] = cls.get_input_output_product(
+                [product], 'output_stock')[product.id]
+            bom_tree['bom_tree'][0]['current_stock'] = product.quantity
         return bom_tree
 
 
