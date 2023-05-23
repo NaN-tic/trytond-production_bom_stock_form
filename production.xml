@@ -15,5 +15,11 @@
             <field name="inherit" ref="production.bom_tree_open_start_view_form"/>
             <field name="name">bom_tree_open_start_form</field>
         </record>
+
+        <record model="ir.ui.view" id="bom_tree_open_tree_view_form">
+            <field name="model">production.bom.tree.open.tree</field>
+            <field name="inherit" ref="production.bom_tree_open_tree_view_form"/>
+            <field name="name">bom_tree_open_tree_form</field>
+        </record>
     </data>
 </tryton>
