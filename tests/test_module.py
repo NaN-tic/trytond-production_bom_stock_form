@@ -103,19 +103,19 @@ class ProductionBomStockFormTestCase(CompanyTestMixin, ModuleTestCase):
                         'product': product,
                         'quantity': 1,
                         'bom': bom,
-                        'uom': uom,
+                        'unit': uom,
                         }])
             self.bom_imput.create([{
                         'product': component1,
                         'quantity': 5,
                         'bom': bom,
-                        'uom': uom,
+                        'unit': uom,
                         }])
             self.bom_imput.create([{
                         'product': component2,
                         'quantity': 20,
                         'bom': bom,
-                        'uom': uom,
+                        'unit': uom,
                         }])
             self.product_bom.create([{
                         'bom': bom,
@@ -142,7 +142,7 @@ class ProductionBomStockFormTestCase(CompanyTestMixin, ModuleTestCase):
             test_product = {
                 'product': product.id,
                 'quantity': 1,
-                'uom': uom.id,
+                'unit': uom.id,
                 'unit_digits': uom.digits,
                 'input_stock': 0,
                 'output_stock': 0,
@@ -152,7 +152,7 @@ class ProductionBomStockFormTestCase(CompanyTestMixin, ModuleTestCase):
             test_component1 = {
                 'product': component1.id,
                 'quantity': 5.0,
-                'uom': uom.id,
+                'unit': uom.id,
                 'unit_digits': uom.digits,
                 'input_stock': 0,
                 'output_stock': 0,
@@ -162,7 +162,7 @@ class ProductionBomStockFormTestCase(CompanyTestMixin, ModuleTestCase):
             test_component2 = {
                 'product': component2.id,
                 'quantity': 20.0,
-                'uom': uom.id,
+                'unit': uom.id,
                 'unit_digits': uom.digits,
                 'input_stock': 0,
                 'output_stock': 0,
@@ -198,7 +198,7 @@ class ProductionBomStockFormTestCase(CompanyTestMixin, ModuleTestCase):
 
             in_move, = self.move.create([{
                         'product': component1.id,
-                        'uom': uom.id,
+                        'unit': uom.id,
                         'quantity': 5,
                         'from_location': supplier_loc.id,
                         'to_location': input_loc.id,
@@ -215,11 +215,11 @@ class ProductionBomStockFormTestCase(CompanyTestMixin, ModuleTestCase):
                         'location': production_loc.id,
                         'warehouse': warehouse_loc.id,
                         'company': company.id,
-                        'uom': uom.id,
+                        'unit': uom.id,
                         }])
             self.move.create([{
                         'product': product,
-                        'uom': uom,
+                        'unit': uom,
                         'quantity': 1,
                         'from_location': production_loc,
                         'to_location': storage_loc,
@@ -231,7 +231,7 @@ class ProductionBomStockFormTestCase(CompanyTestMixin, ModuleTestCase):
                         }])
             self.move.create([{
                         'product': component1,
-                        'uom': uom,
+                        'unit': uom,
                         'quantity': 5,
                         'from_location': storage_loc,
                         'to_location': production_loc,
@@ -243,7 +243,7 @@ class ProductionBomStockFormTestCase(CompanyTestMixin, ModuleTestCase):
                         }])
             self.move.create([{
                         'product': component2,
-                        'uom': uom,
+                        'unit': uom,
                         'quantity': 20,
                         'from_location': storage_loc,
                         'to_location': production_loc,
@@ -258,7 +258,7 @@ class ProductionBomStockFormTestCase(CompanyTestMixin, ModuleTestCase):
             test_product = {
                 'product': product.id,
                 'quantity': 1,
-                'uom': uom.id,
+                'unit': uom.id,
                 'unit_digits': uom.digits,
                 'input_stock': 0,
                 'output_stock': 0,
@@ -268,7 +268,7 @@ class ProductionBomStockFormTestCase(CompanyTestMixin, ModuleTestCase):
             test_component1 = {
                 'product': component1.id,
                 'quantity': 5.0,
-                'uom': uom.id,
+                'unit': uom.id,
                 'unit_digits': uom.digits,
                 'input_stock': 5.0,
                 'output_stock': 5,
@@ -278,7 +278,7 @@ class ProductionBomStockFormTestCase(CompanyTestMixin, ModuleTestCase):
             test_component2 = {
                 'product': component2.id,
                 'quantity': 20.0,
-                'uom': uom.id,
+                'unit': uom.id,
                 'unit_digits': uom.digits,
                 'input_stock': 0,
                 'output_stock': 20,
