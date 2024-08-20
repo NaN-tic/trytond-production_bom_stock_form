@@ -231,8 +231,6 @@ class ProductionBomStockFormTestCase(CompanyTestMixin, ModuleTestCase):
                         'to_location': production_loc,
                         'effective_date': today,
                         'company': company,
-                        'unit_price': Decimal('1'),
-                        'currency': currency,
                         'production_input': production,
                         }])
             self.move.create([{
@@ -243,8 +241,6 @@ class ProductionBomStockFormTestCase(CompanyTestMixin, ModuleTestCase):
                         'to_location': production_loc,
                         'effective_date': today,
                         'company': company,
-                        'unit_price': Decimal('1'),
-                        'currency': currency,
                         'production_input': production,
                         }])
             self.production.wait([production])
