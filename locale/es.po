@@ -1,6 +1,17 @@
 #
+# SPDX-FileCopyrightText: 2026 juanjo <juanjo.garcia@nan-tic.com>
 msgid ""
-msgstr "Content-Type: text/plain; charset=utf-8\n"
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Last-Translator: juanjo <juanjo.garcia@nan-tic.com>\n"
+"PO-Revision-Date: 2026-11-17 15:48+0000\n"
+"Project-Id-Version: \n"
+"Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
+"Language: ca_ES\n"
+"Content-Transfer-Encoding: 8bit\n"
+"MIME-Version: 1.0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 msgctxt "field:production.bom.tree,current_stock:"
 msgid "Current Stock"
@@ -14,10 +25,14 @@ msgctxt "field:production.bom.tree,output_stock:"
 msgid "Outputs"
 msgstr "Salidas"
 
+msgctxt "field:production.bom.tree,warehouses:"
+msgid "Warehouses"
+msgstr "Almacenes"
+
 msgctxt "field:production.bom.tree.open.start,date:"
 msgid "Date"
 msgstr "Fecha"
 
-msgctxt "field:production.bom.tree.open.start,warehouse:"
+msgctxt "field:production.bom.tree.open.start,warehouses:"
 msgid "Warehouse"
 msgstr "Almacén"
